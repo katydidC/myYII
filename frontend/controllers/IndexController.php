@@ -9,6 +9,7 @@ class IndexController extends Controller
 
     public function actionIndex()
     {
+        echo \Yii::$app->request->baseUrl;
         echo Url::to(['category/index'], ['id' => 3]);
         return $this->render("index");
     }

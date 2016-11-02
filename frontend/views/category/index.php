@@ -16,7 +16,7 @@ use yii\helpers\Url;
 <div class="section group">
 	<?php foreach ($list as $key => $val): ?>
 	<div class="grid_1_of_4 images_1_of_4">
-		<a href="preview.html"><img src="<?php echo $val['goods_img'];?>" alt=""></a>
+		<a href="preview.html"><img src="<?php echo \Yii::$app->request->baseUrl . "/" . $val['goods_img'];?>" alt=""></a>
 		<h2><?php echo $val['goods_name'];?></h2>
 		<div class="price-details">
 			<div class="price-number">

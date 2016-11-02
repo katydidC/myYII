@@ -130,4 +130,38 @@ class Goods extends \yii\db\ActiveRecord
             'is_check' => 'Is Check',
         ];
     }
+    
+    /**
+     * 根据goods_id获取商品信息
+     * 
+     * @param unknown $id
+     */
+    public function getOnSaleByGoodsid($id) 
+    {
+        $row = self::find()->where([
+            'goods_id' => $id,
+            'is_delete' => 0
+        ])->one();
+        
+        //1. $model->save(); //model
+        //2. self::find()->one(); //ActiveRecord
+        //3. (new Query())->one(); //Query
+        //4. $db = Yii::$app->db;
+        //    $transaction = $db->beginTransaction();  //db 
+        return $row;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
