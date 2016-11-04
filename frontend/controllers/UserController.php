@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use \yii\web\Controller;
@@ -8,29 +9,38 @@ use Yii;
 use yii\helpers\Url;
 use frontend\models\UsersSearch;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
 
-    public function actionIndex()
-    {
+    public function actionIndex() {
+        if (Yii::$app->user->isGuest) {
+            $this->redirect(Url::to([
+                        '/user/index'
+            ]));
+            return;
+        }
         //获取ID
         $userid = Yii::$app->user->identity->user_id;
         //单人用户信息
         $Users = new Users();
         $userInfo = $Users::find()->where([
-            'user_id' => $userid
-        ])->one();
-        
+                    'user_id' => $userid
+                ])->one();
+
         return $this->render('index', [
-            'userInfo' => $userInfo
+                    'userInfo' => $userInfo
         ]);
     }
 
     /**
      * 注册
      */
-    public function actionSignup()
-    {
+    public function actionSignup() {
+        if (!Yii::$app->user->isGuest) {
+            $this->redirect(Url::to([
+                        '/user/index'
+            ]));
+            return;
+        }
         // return $this->render("signup");
         $model = new Users();
         // 跳过了重复密码验证
@@ -42,14 +52,14 @@ class UserController extends Controller
                     // form inputs are valid, do something here
                     $model->save();
                     $this->redirect(Url::to([
-                        "user/signin"
+                                "user/signin"
                     ]));
                     return;
                 }
             }
         }
         return $this->render('signup', [
-            'model' => $model
+                    'model' => $model
         ]);
     }
 
@@ -58,8 +68,8 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function actionSignin()
-    {
+    public function actionSignin() {
+        $beforeLoginUrl = Yii::$app->session->get("beforeLoginUrl");
         $model = new Users();
         if (Yii::$app->request->getIsPost()) {
             $post = Yii::$app->request->post();
@@ -68,23 +78,29 @@ class UserController extends Controller
             $row = $model->login($post['Users']);
             // 如果登录成功，跳转到用户中心
             if ($row) {
-                $this->redirect(Url::to([
-                    '/user/index'
-                ]));
+                Yii::$app->session->remove("beforeLoginUrl");
+                if (!empty($beforeLoginUrl)) {
+                    header("Location:" . $beforeLoginUrl);
+                    exit();
+                } else {
+                    $this->redirect([
+                        "/user/index"
+                    ]);
+                }
             }
         }
         return $this->render("signin", [
-            'model' => $model
+                    'model' => $model
         ]);
     }
 
     /**
      * 登出
      */
-    public function actionSignout()
-    {
+    public function actionSignout() {
         Yii::$app->user->logout();
-        
+
         return $this->goHome();
     }
+
 }

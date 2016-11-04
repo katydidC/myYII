@@ -1,9 +1,7 @@
 <?php
+
 $params = array_merge(
-    require(__DIR__ . '/../../common/config/params.php'),
-    require(__DIR__ . '/../../common/config/params-local.php'),
-    require(__DIR__ . '/params.php'),
-    require(__DIR__ . '/params-local.php')
+        require(__DIR__ . '/../../common/config/params.php'), require(__DIR__ . '/../../common/config/params-local.php'), require(__DIR__ . '/params.php'), require(__DIR__ . '/params-local.php')
 );
 
 return [
@@ -36,21 +34,29 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'suffix' => '.html',
-            'rules' => [
-                'category/index/<id:\d+>-<page:\d+>-<per-page:\d+>' => 'category/index',
-                'category/index/<id:\d+>' => 'category/index'
-//                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-//                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+        'cache' => [
+            'class' => 'yii\caching\MemCache',
+            'servers' => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 11211,
+                    'weight' => 100
+                ]
             ],
         ],
-        */
-        
+    /*
+      'urlManager' => [
+      'enablePrettyUrl' => true,
+      'showScriptName' => false,
+      'suffix' => '.html',
+      'rules' => [
+      'category/index/<id:\d+>-<page:\d+>-<per-page:\d+>' => 'category/index',
+      'category/index/<id:\d+>' => 'category/index'
+      //                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+      //                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+      ],
+      ],
+     */
     ],
     'params' => $params,
     'defaultRoute' => 'index',
